@@ -111,8 +111,24 @@ function isIsoscelesTriangle(a, b, c) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  const romanNums = [
+    'X',
+    'I',
+    'II',
+    'III',
+    'IV',
+    'V',
+    'VI',
+    'VII',
+    'VIII',
+    'IX',
+  ];
+  let dozens = '';
+  for (let i = 1; i <= Math.floor(num / 10); i += 1) dozens += romanNums[0];
+  const units = num % 10;
+  if (units) return dozens + romanNums[units];
+  return dozens;
 }
 
 /**
@@ -130,8 +146,56 @@ function convertToRomanNumerals(/* num */) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+function convertNumberToString(numberStr) {
+  let res = '';
+  let digit = '';
+
+  for (let i = 0; i < numberStr.length; i += 1) {
+    switch (numberStr[i]) {
+      case '0':
+        digit = 'zero';
+        break;
+      case '1':
+        digit = 'one';
+        break;
+      case '2':
+        digit = 'two';
+        break;
+      case '3':
+        digit = 'three';
+        break;
+      case '4':
+        digit = 'four';
+        break;
+      case '5':
+        digit = 'five';
+        break;
+      case '6':
+        digit = 'six';
+        break;
+      case '7':
+        digit = 'seven';
+        break;
+      case '8':
+        digit = 'eight';
+        break;
+      case '9':
+        digit = 'nine';
+        break;
+      case ',':
+      case '.':
+        digit = 'point';
+        break;
+      case '-':
+        digit = 'minus';
+        break;
+      default:
+        break;
+    }
+    if (res === '') res = digit;
+    else res = `${res} ${digit}`;
+  }
+  return res;
 }
 
 /**
@@ -146,8 +210,12 @@ function convertNumberToString(/* numberStr */) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  let rev = '';
+  for (let i = 0; i < str.length; i += 1) {
+    rev = str[i] + rev;
+  }
+  return rev === str;
 }
 
 /**
@@ -164,8 +232,11 @@ function isPalindrome(/* str */) {
  *  'qwerty', 'Q'     => -1
  *  'qwerty', 'p'     => -1
  */
-function getIndexOf(/* str, letter */) {
-  throw new Error('Not implemented');
+function getIndexOf(str, letter) {
+  for (let i = 0; i < str.length; i += 1) {
+    if (letter === str[i]) return i;
+  }
+  return -1;
 }
 
 /**
@@ -183,8 +254,13 @@ function getIndexOf(/* str, letter */) {
  *  12345, 0    => false
  *  12345, 6    => false
  */
-function isContainNumber(/* num, digit */) {
-  throw new Error('Not implemented');
+function isContainNumber(num, digit) {
+  let n = num;
+  while (n > 0) {
+    if (n % 10 === digit) return true;
+    n = Math.trunc(n / 10);
+  }
+  return false;
 }
 
 /**
@@ -200,8 +276,17 @@ function isContainNumber(/* num, digit */) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  let sum = 0;
+  for (let i = 0; i < arr.length; i += 1) {
+    sum += arr[i];
+  }
+  for (let i = 0; i < arr.length; i += 1) {
+    let sumLeft = 0;
+    for (let j = 0; j < i; j += 1) sumLeft += arr[j];
+    if (sumLeft === sum - arr[i] - sumLeft) return i;
+  }
+  return -1;
 }
 
 /**
@@ -225,8 +310,49 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const res = [];
+  for (let i = 0; i < size; i += 1) {
+    const resItem = [];
+    for (let j = 0; j < size; j += 1) {
+      resItem[j] = null;
+    }
+    res[i] = resItem;
+  }
+  let n = 1;
+  let i = 0;
+  let j = 0;
+  while (n <= size ** 2) {
+    while (j < size && res[i][j] === null) {
+      res[i][j] = n;
+      j += 1;
+      n += 1;
+    }
+    j -= 1;
+    i += 1;
+    while (i < size && res[i][j] === null) {
+      res[i][j] = n;
+      i += 1;
+      n += 1;
+    }
+    i -= 1;
+    j -= 1;
+    while (j >= 0 && res[i][j] === null) {
+      res[i][j] = n;
+      j -= 1;
+      n += 1;
+    }
+    j += 1;
+    i -= 1;
+    while (i >= 0 && res[i][j] === null) {
+      res[i][j] = n;
+      i -= 1;
+      n += 1;
+    }
+    i += 1;
+    j += 1;
+  }
+  return res;
 }
 
 /**

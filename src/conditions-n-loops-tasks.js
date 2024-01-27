@@ -430,7 +430,7 @@ function sortArr(arr) {
     leftArr[i] = arr[i];
     rightArr[halfLength - 1 - i] = arr[arr.length - 1 - i];
   }
-  if (arr.length % 2 > 0) leftArr[leftArr.length] = arr[halfLength];
+  if (arr.length % 2) leftArr[leftArr.length] = arr[halfLength];
   return mergeArrs(sortArr(leftArr), sortArr(rightArr));
 }
 
@@ -457,8 +457,25 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function oneShuffle(str) {
+  let strLeft = '';
+  let strRight = '';
+  for (let i = 0; i < str.length; i += 1)
+    if (i % 2) strRight += str[i];
+    else strLeft += str[i];
+  return strLeft + strRight;
+}
+
+function shuffleChar(str, iterations) {
+  let res = str;
+  let count = 0;
+  do {
+    res = oneShuffle(res);
+    count += 1;
+    if (count === iterations) return res;
+  } while (res !== str);
+  for (let i = 0; i < iterations % count; i += 1) res = oneShuffle(res);
+  return res;
 }
 
 /**
@@ -478,8 +495,34 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+
+function replaceDigit(i, j, number) {
+  const digit = Math.trunc(number / 10 ** j) % 10;
+  const num =
+    Math.trunc(number / 10 ** j) * 10 ** (j - 1) -
+    digit * 10 ** (j - 1) +
+    Math.round(number % 10 ** j);
+  return (
+    Math.trunc(num / 10 ** i) * 10 ** (i + 1) +
+    digit * 10 ** i +
+    Math.round(num % 10 ** i)
+  );
+}
+
+function getBigger(number, controlValue) {
+  const length = Math.floor(Math.log10(number)) + 1;
+  for (let i = 0; i < length; i += 1) {
+    for (let j = 0; j < length; j += 1) {
+      const res = replaceDigit(i, j, number);
+      if ((res < number || controlValue === number) && res > controlValue)
+        return getBigger(res, controlValue);
+    }
+  }
+  return number;
+}
+
+function getNearestBigger(number) {
+  return getBigger(number, number);
 }
 
 module.exports = {

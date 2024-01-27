@@ -370,8 +370,22 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const n = matrix.length;
+  const res = matrix;
+  const tempMatrix = [];
+  for (let i = 0; i < n; i += 1) {
+    tempMatrix[i] = [];
+    for (let j = 0; j < n; j += 1) {
+      tempMatrix[i][j] = matrix[n - j - 1][i];
+    }
+  }
+  for (let i = 0; i < n; i += 1) {
+    for (let j = 0; j < n; j += 1) {
+      res[i][j] = tempMatrix[i][j];
+    }
+  }
+  return matrix;
 }
 
 /**
@@ -388,8 +402,42 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function mergeArrs(arr1, arr2) {
+  let i = 0;
+  let j = 0;
+  const resArr = [];
+  while (arr1.length > i && arr2.length > j) {
+    if (arr1[i] > arr2[j]) {
+      resArr[resArr.length] = arr2[j];
+      j += 1;
+    } else {
+      resArr[resArr.length] = arr1[i];
+      i += 1;
+    }
+  }
+  if (i < arr1.length)
+    for (let k = i; k < arr1.length; k += 1) resArr[resArr.length] = arr1[k];
+  else for (let k = j; k < arr2.length; k += 1) resArr[resArr.length] = arr2[k];
+  return resArr;
+}
+
+function sortArr(arr) {
+  if (arr.length < 2) return arr;
+  const halfLength = Math.trunc(arr.length / 2);
+  const leftArr = [];
+  const rightArr = [];
+  for (let i = 0; i <= arr.length / 2 - 1; i += 1) {
+    leftArr[i] = arr[i];
+    rightArr[halfLength - 1 - i] = arr[arr.length - 1 - i];
+  }
+  if (arr.length % 2 > 0) leftArr[leftArr.length] = arr[halfLength];
+  return mergeArrs(sortArr(leftArr), sortArr(rightArr));
+}
+
+function sortByAsc(arr) {
+  const res = arr;
+  const sortedArr = sortArr(arr);
+  for (let i = 0; i < res.length; i += 1) res[i] = sortedArr[i];
 }
 
 /**
